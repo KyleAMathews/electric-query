@@ -1,5 +1,5 @@
 # electric-query
-Library for deeply integrating [ElectricSQL](https://electric-sql.com/) partial syncing and queries with your (React) routes.
+Library for deeply integrating [ElectricSQL](https://electric-sql.com/) partial syncing and queries with your React app routes.
 
 ## Install
 
