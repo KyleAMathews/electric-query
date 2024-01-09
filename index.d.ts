@@ -20,6 +20,8 @@ type ShapeFunction<Electric extends ElectricWithDb> = (params: {
 }>;
 type QueriesRecord<Electric extends ElectricWithDb> = (params: {
     db: Electric[`db`];
+} & {
+    [key: string]: any;
 }) => Record<string, QueryFunction>;
 type QueryFunction = () => Promise<any>;
 declare function electricSqlLoader<Electric extends ElectricWithDb>({ key, shapes, queries, }: {

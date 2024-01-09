@@ -48,9 +48,9 @@ type ShapeFunction<Electric extends ElectricWithDb> = (params: {
   isReady: () => Promise<boolean>
 }>
 
-type QueriesRecord<Electric extends ElectricWithDb> = (params: {
-  db: Electric[`db`]
-}) => Record<string, QueryFunction>
+type QueriesRecord<Electric extends ElectricWithDb> = (
+  params: { db: Electric[`db`] } & { [key: string]: any }
+) => Record<string, QueryFunction>
 
 type QueryFunction = () => Promise<any>
 
