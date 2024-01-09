@@ -1,7 +1,29 @@
 {
   "name": "electric-query",
-  "version": "0.0.4",
   "description": "Library for integrating ElectricSQL queries with your (React) routes",
+  "version": "0.0.4",
+  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/KyleAMathews/electric-query/issues"
+  },
+  "dependencies": {
+    "browser-tab-id": "^0.0.3"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
+    "electric-sql": "^0.8.2",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-plugin-prettier": "^5.1.2",
+    "eslint-plugin-react": "^7.33.2",
+    "prettier": "^3.1.1",
+    "shx": "^0.3.4",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "wa-sqlite": "^0.9.9"
+  },
   "exports": {
     "import": "./dist/index.js",
     "types": "./index.d.ts"
@@ -10,36 +32,22 @@
     "dist/index.js",
     "*.d.ts"
   ],
-  "scripts": {
-    "build": "npm run clean && tsup --external electric-sql/wa-sqlite --external electric-sql/react && npm run post-build",
-    "prepublishOnly": "npm run build",
-    "check": "tsc",
-    "clean": "shx rm -rf dist *.d.ts",
-    "post-build": "shx mv dist/*.d.ts* .",
-    "test": "vitest"
-  },
+  "homepage": "https://github.com/KyleAMathews/electric-query#readme",
+  "keywords": [
+    "electric-sql"
+  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KyleAMathews/electric-query.git"
   },
-  "keywords": [
-    "electric-sql"
-  ],
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/KyleAMathews/electric-query/issues"
-  },
-  "homepage": "https://github.com/KyleAMathews/electric-query#readme",
-  "dependencies": {
-    "browser-tab-id": "^0.0.3"
-  },
-  "devDependencies": {
-    "electric-sql": "^0.8.2",
-    "shx": "^0.3.4",
-    "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "wa-sqlite": "^0.9.9"
+  "scripts": {
+    "build": "npm run clean && tsup --external electric-sql/wa-sqlite --external electric-sql/react && npm run post-build",
+    "check": "tsc",
+    "clean": "shx rm -rf dist *.d.ts",
+    "post-build": "shx mv dist/*.d.ts* .",
+    "prepublishOnly": "npm run build",
+    "test": "vitest"
   },
   "tsup": {
     "entry": [

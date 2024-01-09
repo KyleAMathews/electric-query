@@ -169,4 +169,3 @@ export function useElectricData(key: string) {
     return Object.fromEntries(results)
   }
 }
-
