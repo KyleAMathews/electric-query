@@ -1,0 +1,47 @@
+{
+  "name": "electric-query",
+  "version": "0.0.1",
+  "description": "Library for integrating ElectricSQL queries with your (React) routes",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run clean && tsup && npm run post-build",
+    "prepublishOnly": "npm run build",
+    "check": "tsc",
+    "clean": "shx rm -rf dist *.d.ts",
+    "post-build": "shx mv dist/*.d.ts* .",
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KyleAMathews/electric-query.git"
+  },
+  "keywords": [
+    "electric-sql"
+  ],
+  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KyleAMathews/electric-query/issues"
+  },
+  "homepage": "https://github.com/KyleAMathews/electric-query#readme",
+  "dependencies": {
+    "browser-tab-id": "^0.0.3"
+  },
+  "devDependencies": {
+    "electric-sql": "^0.8.2",
+    "shx": "^0.3.4",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "wa-sqlite": "^0.9.9"
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "dts": true
+  }
+}
