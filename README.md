@@ -8,24 +8,24 @@ import { Electric, schema } from "./generated/client"
 import sqliteWasm from "wa-sqlite/dist/wa-sqlite-async.wasm?asset"
 
 if (loggedIn) {
-    const electric = await initElectric({
-        appName: `my-app`,
-        schema,
-        sqlWasmPath: sqliteWasm,
-        config: {
-          auth: {
-            token,
-          },
-          debug: false, //DEBUG_MODE,
-          url: electricUrl,
-        }
-    })
+  const electric = await initElectric({
+    appName: `my-app`,
+    schema,
+    sqlWasmPath: sqliteWasm,
+    config: {
+      auth: {
+        token,
+      },
+      debug: false, //DEBUG_MODE,
+      url: electricUrl,
+    },
+  })
 } else {
   setLoggedOut()
 }
 
 // In routes
-[
+const routes = [
   ...otherRoutes,
   {
     path: `/type/:id`,
@@ -44,8 +44,7 @@ if (loggedIn) {
             isReady: async () => !!(await db.youtube_videos.findFirst()),
           },
         ],
-        queries: ({ db }) =>
-          Video.queries({ db, id: props.params.videoId }),
+        queries: ({ db }) => Video.queries({ db, id: props.params.videoId }),
       })
 
       return null
@@ -64,15 +63,12 @@ const queries = ({ db, props }: { db: Electric[`db`] }) => {
   }
 }
 
-export default function Component () {
+export default function Component() {
   const location = useLocation()
-  const { foo } = useElectricData(
-    location.pathname + location.search
-  )
+  const { foo } = useElectricData(location.pathname + location.search)
 
   return JSON.stringify(foo, null, 4)
 }
 
 Component.queries = queries
-
 ```
