@@ -6,7 +6,7 @@ import { ElectricConfig } from "electric-sql/config"
 interface InitElectricParams {
   appName: string
   sqliteWasmPath: string
-  schema: any // Replace 'any' with the actual type of schema if available
+  schema: any
   config: ElectricConfig
 }
 
@@ -38,7 +38,7 @@ export async function initElectric(params: InitElectricParams) {
 }
 
 interface ElectricWithDb {
-  db: any // Specify the type of 'db' more precisely if possible
+  db: any
 }
 
 type ShapeFunction<Electric extends ElectricWithDb> = (params: {

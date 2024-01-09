@@ -1,6 +1,24 @@
 # electric-query
-Library for integrating ElectricSQL queries with your (React) routes
+Library for deeply integrating [ElectricSQL](https://electric-sql.com/) partial syncing and queries with your (React) routes.
 
+## Install
+
+`npm install electric-query`
+
+## Why
+
+This library makes it easy to sync and query the exact data that's needed for each route.
+
+The simplest way to build an ElectricSQL app is to sync upfront all data. But this gets slow as for larger apps. So just like code splitting, you can split data syncing along route boundaries so the user waits for only the minimal amount of data to be synced.
+
+ElectricSQL has this concept of “[Shapes](https://electric-sql.com/docs/usage/data-access/shapes)” — which let you declare the shape of data you want synced to construct a particular route’s UI. It’s basically the declarative equivalent of making an API call (an imperative operation). Instead of saying “fetch this shape of data”, you say “sync this shape of data”. You get the same initial load but ElectricSQL also ensures any updates across the system continue to get synced to you in real-time.
+
+Partial syncing with Shapes is very similar to code splitting. Small apps can easily load all code in one go but as apps get larger, splitting up code loading (often by route) becomes increasingly necessary.
+
+## Usage
+
+The library exposes an `initElectric` function which takes care of initializing
+Electric.
 
 ```ts
 import { initElectric, setLoggedOut } from "electric-query"
@@ -23,7 +41,14 @@ if (loggedIn) {
 } else {
   setLoggedOut()
 }
+```
 
+In the `loader` (or equivalent) function for each route, you define the sync shapes
+and queries for each route. Electric Query ensures both are finished before
+calling your route component. This means the new route can immediately render
+without any blinking.
+
+```ts
 // In routes
 const routes = [
   ...otherRoutes,
@@ -51,7 +76,14 @@ const routes = [
     },
   },
 ]
+```
 
+Each route component then uses an `useElectricData` hook to get the results
+of the queries.
+
+For easy reading, we suggest you write component queries alongside the UI code.
+
+```ts
 // In route components
 import { useElectricData } from "electric-query"
 import { useLocation } from "react-router-dom"
@@ -72,3 +104,5 @@ export default function Component() {
 
 Component.queries = queries
 ```
+
+For a full example of using this library, see this starter https://github.com/KyleAMathews/vite-react-router-electric-sql-starter
