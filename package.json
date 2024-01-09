@@ -1,7 +1,7 @@
 {
   "name": "electric-query",
   "description": "Library for integrating ElectricSQL queries with your (React) routes",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "bugs": {
     "url": "https://github.com/KyleAMathews/electric-query/issues"
