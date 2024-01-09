@@ -8,7 +8,7 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "npm run clean && tsup && npm run post-build",
+    "build": "npm run clean && tsup --external electric-sql/wa-sqlite --external electric-sql/react && npm run post-build",
     "prepublishOnly": "npm run build",
     "check": "tsc",
     "clean": "shx rm -rf dist *.d.ts",
