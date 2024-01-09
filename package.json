@@ -2,7 +2,10 @@
   "name": "electric-query",
   "version": "0.0.3",
   "description": "Library for integrating ElectricSQL queries with your (React) routes",
-  "exports": "./dist/index.js",
+  "exports": {
+    "import": "./dist/index.js",
+    "types": "./index.d.ts"
+  },
   "files": [
     "dist/index.js",
     "*.d.ts"
