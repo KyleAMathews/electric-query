@@ -11,7 +11,7 @@ if (loggedIn) {
   const electric = await initElectric({
     appName: `my-app`,
     schema,
-    sqlWasmPath: sqliteWasm,
+    sqliteWasmPath: sqliteWasm,
     config: {
       auth: {
         token,
