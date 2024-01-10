@@ -13,8 +13,6 @@ The simplest way to build an ElectricSQL app is to sync upfront all data. But th
 
 ElectricSQL has this concept of “[Shapes](https://electric-sql.com/docs/usage/data-access/shapes)” — which let you declare the shape of data you want synced to construct a particular route’s UI. It’s basically the declarative equivalent of making an API call (an imperative operation). Instead of saying “fetch this shape of data”, you say “sync this shape of data”. You get the same initial load but ElectricSQL also ensures any updates across the system continue to get synced to you in real-time.
 
-Partial syncing with Shapes is very similar to code splitting. Small apps can easily load all code in one go but as apps get larger, splitting up code loading (often by route) becomes increasingly necessary.
-
 ## Usage
 
 The library exposes an `initElectric` function which takes care of initializing
@@ -89,7 +87,7 @@ import { useElectricData } from "electric-query"
 import { useLocation } from "react-router-dom"
 import { Electric, schema } from "../generated/client"
 
-const queries = ({ db, props }: { db: Electric[`db`] }) => {
+const queries = ({ db }: { db: Electric[`db`] }) => {
   return {
     foo: db.my_table.liveMany(),
   }
