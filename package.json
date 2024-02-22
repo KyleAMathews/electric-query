@@ -25,7 +25,8 @@
     "wa-sqlite": "^0.9.9"
   },
   "exports": {
-    "import": "./dist/index.js",
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js",
     "types": "./index.d.ts"
   },
   "files": [
