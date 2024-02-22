@@ -25,13 +25,21 @@
     "wa-sqlite": "^0.9.9"
   },
   "exports": {
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.js",
-    "types": "./index.d.ts"
+    ".": {
+      "types": {
+        "import": "./dist/index.d.mts",
+        "require": "./dist/index.d.ts"
+      },
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
   },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
-    "dist/index.js",
-    "*.d.ts"
+    "dist"
   ],
   "homepage": "https://github.com/KyleAMathews/electric-query#readme",
   "keywords": [
@@ -43,10 +51,9 @@
     "url": "git+https://github.com/KyleAMathews/electric-query.git"
   },
   "scripts": {
-    "build": "npm run clean && tsup --external electric-sql/wa-sqlite --external electric-sql/react && npm run post-build",
+    "build": "npm run clean && tsup --external electric-sql/wa-sqlite --external electric-sql/react",
     "check": "tsc",
     "clean": "shx rm -rf dist *.d.ts",
-    "post-build": "shx mv dist/*.d.ts* .",
     "prepublishOnly": "npm run build",
     "test": "vitest"
   },
