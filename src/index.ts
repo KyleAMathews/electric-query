@@ -1,13 +1,19 @@
 import { useLiveQuery } from "electric-sql/react"
+import { SatelliteErrorCode } from "electric-sql/util"
 import { ElectricDatabase, electrify } from "electric-sql/wa-sqlite"
 import { TabIdCoordinator } from "browser-tab-id"
 import { ElectricConfig } from "electric-sql/config"
+
+type GetTokenFunction = () => Promise<string>
 
 interface InitElectricParams {
   appName: string
   sqliteWasmPath: string
   schema: any
   config: ElectricConfig
+  token: string
+  getToken?: GetTokenFunction
+  renewInterval?: number
 }
 
 // Get our tabId
@@ -32,6 +38,46 @@ export async function initElectric(params: InitElectricParams) {
 
   const conn = await ElectricDatabase.init(tabScopedDbName, sqliteWasmPath)
   const electric = await electrify(conn, schema, config)
+
+  // Connect to Electric
+  await electric.connect(params.token)
+  console.log(`connected`, { token: params.token })
+
+  if (params.getToken && params.renewInterval) {
+    // let stopRenewing = renewPeriodically(electric, params.renewInterval)
+
+    // Subscribe to connectivity changes to detect JWT expiration
+    electric.notifier.subscribeToConnectivityStateChanges(async (event) => {
+      console.log({ event })
+      if (
+        typeof params.getToken === `function` &&
+        event.connectivityState.status === `disconnected` &&
+        event.connectivityState.reason?.code === SatelliteErrorCode.AUTH_EXPIRED
+      ) {
+        console.log(`JWT expired, reconnecting...`)
+        // stopRenewing() // NOTE: the connectivity state change event is async and is fired after the socket to Electric is closed. Between the socket closing and this event firing, we may have tried to renew the token which will fail
+        const newToken = await params.getToken()
+        await electric.connect(newToken)
+        console.log(`connection restored`)
+        // stopRenewing = renewPeriodically(electric, oneMinute)
+      }
+    })
+
+    // Renews the JWT periodically
+    // and returns a function that can be called to stop renewing
+    // function renewPeriodically(electric: Client, ms: number) {
+    // const id = setInterval(async () => {
+    // // Renew the JWT
+    // const renewedToken = await params.getToken()
+    // await electric.authenticate(renewedToken)
+    // console.log(`Renewed JWT`)
+    // }, ms)
+    // return () => {
+    // clearInterval(id)
+    // }
+    // }
+  }
+
   electricResolve(electric)
 
   return electric
@@ -50,7 +96,7 @@ type ShapeFunction<Electric extends ElectricWithDb> = (params: {
 
 type QueriesRecord<Electric extends ElectricWithDb> = (
   params: { db: Electric[`db`] } & { [key: string]: any }
-) => Record<string, QueryFunction>
+) => Record<string, QueryFunction> | (() => Record<string, QueryFunction>)
 
 type QueryFunction = () => Promise<any>
 
@@ -105,7 +151,11 @@ export async function electricSqlLoader<Electric extends ElectricWithDb>({
     await syncTables()
   }
 
-  const setupQueries = queries({ db })
+  let setupQueries = queries({ db })
+  if (typeof setupQueries === `function`) {
+    setupQueries = setupQueries()
+  }
+
   queriesMap.set(key, setupQueries)
 
   // Run queries
