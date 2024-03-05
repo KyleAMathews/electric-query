@@ -3,6 +3,7 @@ import { SatelliteErrorCode } from "electric-sql/util"
 import { ElectricDatabase, electrify } from "electric-sql/wa-sqlite"
 import { TabIdCoordinator } from "browser-tab-id"
 import { ElectricConfig } from "electric-sql/config"
+import lifecycle from "page-lifecycle"
 
 type GetTokenFunction = () => Promise<string>
 
@@ -58,8 +59,8 @@ export async function initElectric(params: InitElectricParams) {
       }
     })
 
-    document.addEventListener(`visibilitychange`, async function () {
-      if (document.visibilityState === `visible`) {
+    lifecycle.addEventListener(`statechange`, async function (event) {
+      if (event.newState === `active`) {
         if (!electric.isConnected) {
           if (params.getToken) {
             const newToken = await params.getToken()
