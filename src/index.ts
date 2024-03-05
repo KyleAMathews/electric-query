@@ -13,7 +13,6 @@ interface InitElectricParams {
   config: ElectricConfig
   token: string
   getToken?: GetTokenFunction
-  renewInterval?: number
 }
 
 // Get our tabId
