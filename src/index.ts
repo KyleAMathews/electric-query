@@ -43,9 +43,7 @@ export async function initElectric(params: InitElectricParams) {
   await electric.connect(params.token)
   console.log(`connected`, { token: params.token })
 
-  if (params.getToken && params.renewInterval) {
-    // let stopRenewing = renewPeriodically(electric, params.renewInterval)
-
+  if (params.getToken) {
     // Subscribe to connectivity changes to detect JWT expiration
     electric.notifier.subscribeToConnectivityStateChanges(async (event) => {
       console.log({ event })
@@ -55,27 +53,23 @@ export async function initElectric(params: InitElectricParams) {
         event.connectivityState.reason?.code === SatelliteErrorCode.AUTH_EXPIRED
       ) {
         console.log(`JWT expired, reconnecting...`)
-        // stopRenewing() // NOTE: the connectivity state change event is async and is fired after the socket to Electric is closed. Between the socket closing and this event firing, we may have tried to renew the token which will fail
         const newToken = await params.getToken()
         await electric.connect(newToken)
         console.log(`connection restored`)
-        // stopRenewing = renewPeriodically(electric, oneMinute)
       }
     })
 
-    // Renews the JWT periodically
-    // and returns a function that can be called to stop renewing
-    // function renewPeriodically(electric: Client, ms: number) {
-    // const id = setInterval(async () => {
-    // // Renew the JWT
-    // const renewedToken = await params.getToken()
-    // await electric.authenticate(renewedToken)
-    // console.log(`Renewed JWT`)
-    // }, ms)
-    // return () => {
-    // clearInterval(id)
-    // }
-    // }
+    document.addEventListener(`visibilitychange`, async function () {
+      if (document.visibilityState === `visible`) {
+        if (!electric.isConnected) {
+          if (params.getToken) {
+            const newToken = await params.getToken()
+            await electric.connect(newToken)
+            console.log(`reconnected`)
+          }
+        }
+      }
+    })
   }
 
   electricResolve(electric)
